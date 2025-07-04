@@ -272,7 +272,11 @@ def profile(token: Annotated[str, Depends(oauth2_scheme)]):
         connection = get_connection()
         cursor = connection.cursor()
 
-        cursor.execute("SELECT * FROM users WHERE username = %s", (userName,))
+        if is_email(userName):
+            cursor.execute("SELECT * FROM users WHERE email = %s", (userName,))
+
+        else:
+            cursor.execute("SELECT * FROM users WHERE username = %s", (userName,))
         data = cursor.fetchone()
         print("Fetched user data:", data)
 

@@ -7,10 +7,10 @@ load_dotenv()
 
 
 
-REMOVED_pool = pool.SimpleConnectionPool(
+db_pool = pool.SimpleConnectionPool(
     minconn=0,
     maxconn=10,
-    REMOVEDname=os.getenv("DB_NAME"),
+    dbname=os.getenv("DB_NAME"),
     user=os.getenv("DB_USER"),
     password=os.getenv("DB_PASSWORD"),
     host=os.getenv("DB_HOST"),
@@ -20,8 +20,8 @@ REMOVED_pool = pool.SimpleConnectionPool(
 )
 
 def get_connection():
-    pool = REMOVED_pool.getconn()
+    pool = db_pool.getconn()
     return pool
 
 def return_connection(pool):
-    REMOVED_pool.putconn(pool)
+    db_pool.putconn(pool)

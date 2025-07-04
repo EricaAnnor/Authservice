@@ -1,4 +1,3 @@
-
 services:
   web:
     build: .
@@ -10,7 +9,7 @@ services:
     env_file:               
       - .env
     depends_on:
-      REMOVED:
+      db:
         condition: service_healthy  
      
     environment:
@@ -24,25 +23,24 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI}
       SESSION_SECRET: ${SESSION_SECRET}
-  REMOVED:
-    image: REMOVED:REMOVED
-    container_name: auth_REMOVED
+
+  db:
+    image: postgres:15
+    container_name: auth_db
     restart: always
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5434:REMOVED"
+      - "5434:5432"
     volumes:
-      - REMOVED_data:/var/lib/REMOVEDql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck: 
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-
-
 volumes:
-  REMOVED_data:
+  postgres_data:

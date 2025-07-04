@@ -9,7 +9,6 @@ load_dotenv()
 
 app = FastAPI()
 
-# ✅ Add CORSMiddleware first
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -21,13 +20,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ Add SessionMiddleware separately
 app.add_middleware(
     SessionMiddleware,
     secret_key=os.getenv("SESSION_SECRET", "your-secret-key")
 )
 
-# ✅ Include routers
 app.include_router(auth_routers)
 app.include_router(protected_router)
 app.include_router(google_routers)
