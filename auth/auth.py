@@ -81,10 +81,10 @@ def create_access_token(data:dict,expire_time: timedelta|None = None):
     encode_data = data.copy()
 
     if expire_time:
-        expire = datetime.now(timezone.utc) + timedelta(minutes= int(os.getenv("ACCESSEXPIRETIME",REMOVED)))
+        expire = datetime.now(timezone.utc) + timedelta(minutes= int(os.getenv("ACCESSEXPIRETIME",15)))
 
     else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=REMOVED)
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
 
     encode_data.update({"exp":expire})
 
@@ -187,7 +187,7 @@ def login(response: Response, data: Annotated[OAuth2PasswordRequestForm, Depends
 
     access_token = create_access_token(
         {"sub": data.username},
-        timedelta(minutes=int(os.getenv("ACCESSEXPIRETIME", REMOVED)))
+        timedelta(minutes=int(os.getenv("ACCESSEXPIRETIME", 15)))
     )
     refresh_token = create_refresh_token(
         {"sub": data.username},
@@ -237,7 +237,7 @@ def refresh(request:Request,body:RefreshRequest = None):
         
         access_token = create_access_token(
             {"sub": username},
-            timedelta(minutes=int(os.getenv("ACCESSEXPIRETIME", REMOVED)))
+            timedelta(minutes=int(os.getenv("ACCESSEXPIRETIME", 15)))
         )
 
         return Token(access_token=access_token, access_type="Bearer",refresh_token=refresh_token)
@@ -351,7 +351,7 @@ async def google_callback(request: Request,response:Response):
         cur_user = cur["username"]
         access_token = create_access_token(
             {"sub": cur_user},
-            timedelta(minutes=int(os.getenv("ACCESSEXPIRETIME", REMOVED)))
+            timedelta(minutes=int(os.getenv("ACCESSEXPIRETIME", 15)))
         )
         refresh_token = create_refresh_token(
             {"sub": cur_user},
